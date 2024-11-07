@@ -1,9 +1,9 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import MainPage from "../../pages/main-page/main-page";
-import CatalogPage from "../../pages/catalog-page/catalog-page";
-import ProductPage from "../../pages/product-page/product-page";
-import FavoritesPage from "../../pages/favorites-page/favorites-page";
-import { AppRoute } from "../../const";
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import MainPage from '../../pages/main-page/main-page';
+import CatalogPage from '../../pages/catalog-page/catalog-page';
+import ProductPage from '../../pages/product-page/product-page';
+import FavoritesPage from '../../pages/favorites-page/favorites-page';
+import { AppRoute } from '../../const';
 
 function App(): JSX.Element {
   return (

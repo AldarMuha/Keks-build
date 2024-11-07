@@ -1,4 +1,12 @@
-function MainCard(): JSX.Element {
+type CardType = {
+  title: string;
+  previewImage: string;
+  previewImageWebp: string;
+  isNew: boolean;
+  isFavorite: boolean;
+}
+
+function MainCard({ title, previewImage, previewImageWebp, isNew, isFavorite }: CardType): JSX.Element {
   return (
     <li className="random-main__item">
       <div className="card-item">
@@ -7,20 +15,20 @@ function MainCard(): JSX.Element {
             <picture>
               <source
                 type="image/webp"
-                srcSet="img/content/blueberry-cake.webp, img/content/blueberry-cake@2x.webp 2x"
+                srcSet={previewImageWebp}
               />
               <img
-                src="img/content/blueberry-cake.jpg"
-                srcSet="img/content/blueberry-cake@2x.jpg 2x"
+                src={previewImage}
+                srcSet={previewImage}
                 width={241}
                 height={245}
                 alt="Торт голубика."
               />
             </picture>
           </div>
-          <span className="card-item__label">Новинка</span>
+          {isNew ? <span className="card-item__label">Новинка</span> : ''}
         </a>
-        <button className="card-item__favorites card-item__favorites--active">
+        <button className={`card-item__favorites${(isFavorite) ? ' card-item__favorites--active' : ''}`} >
           <span className="visually-hidden">Добавить в избранное</span>
           <svg width={51} height={41} aria-hidden="true">
             <use xlinkHref="#icon-like" />
@@ -28,7 +36,7 @@ function MainCard(): JSX.Element {
         </button>
         <a className="card-item__link" href="#">
           <h3 className="card-item__title">
-            <span>Торт Голубика</span>
+            <span>{title}</span>
           </h3>
         </a>
       </div>

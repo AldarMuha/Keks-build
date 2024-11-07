@@ -1,5 +1,5 @@
 export enum AppRoute {
-  Root = '/Index',
+  Root = '/',
   Catalog = '/Catalog',
   Favorites = '/Favorites',
   NotPage = '/404',
@@ -7,4 +7,14 @@ export enum AppRoute {
   Registre = '/SignUp',
   ErrorPage = '/ErrorPage',
   ProductPage = '/ProductPage',
+}
+
+export enum HttpCode {
+  NotFound = 404
+}
+
+export enum StoreSlice {
+  SiteData = 'SITE_DATA',
+  SiteProcess = 'SITE_PROCESS',
+  UserProcess = 'USER_PROCESS',
 }

@@ -1,116 +1,19 @@
+import MainCard from '../main-card/main-card';
+import { useAppSelector } from '../../hooks';
+import { getIsProductsLoading, getProducts } from '../../store/site-data/selectors';
+
 function MainCardList(): JSX.Element {
+  const isProductsLoading = useAppSelector(getIsProductsLoading);
+  const products = useAppSelector(getProducts);
+  if (isProductsLoading) {
+    return <p>Загрузка....</p>;
+  }
+
   return (
     <ul className="random-main__list">
-      <li className="random-main__item">
-        <div className="card-item">
-          <a className="card-item__img-link" href="#">
-            <div className="card-item__img-wrapper">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcSet="img/content/blueberry-cake.webp, img/content/blueberry-cake@2x.webp 2x"
-                />
-                <img
-                  src="img/content/blueberry-cake.jpg"
-                  srcSet="img/content/blueberry-cake@2x.jpg 2x"
-                  width={241}
-                  height={245}
-                  alt="Торт голубика."
-                />
-              </picture>
-            </div>
-            <span className="card-item__label">Новинка</span>
-          </a>
-          <button className="card-item__favorites card-item__favorites--active">
-            <span className="visually-hidden">Добавить в избранное</span>
-            <svg width={51} height={41} aria-hidden="true">
-              <use xlinkHref="#icon-like" />
-            </svg>
-          </button>
-          <a className="card-item__link" href="#">
-            <h3 className="card-item__title">
-              <span>Торт Голубика</span>
-            </h3>
-          </a>
-        </div>
-      </li>
-      <li className="random-main__item">
-        <div className="card-item">
-          <a className="card-item__img-link" href="#">
-            <div className="card-item__img-wrapper">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcSet="img/content/chocolate-pie.webp, img/content/chocolate-pie@2x.webp 2x"
-                />
-                <img
-                  src="img/content/chocolate-pie.jpg"
-                  srcSet="img/content/chocolate-pie@2x.jpg 2x"
-                  width={241}
-                  height={245}
-                  alt="Шоколадный кекс."
-                />
-              </picture>
-            </div>
-          </a>
-          <button className="card-item__favorites">
-            <span className="visually-hidden">Добавить в избранное</span>
-            <svg width={51} height={41} aria-hidden="true">
-              <use xlinkHref="#icon-like" />
-            </svg>
-          </button>
-          <a className="card-item__link" href="#">
-            <h3 className="card-item__title">
-              <span>Шоколадный Кекс</span>
-            </h3>
-          </a>
-        </div>
-      </li>
-      <li className="random-main__item">
-        <div className="card-item">
-          <a className="card-item__img-link" href="#">
-            <div className="card-item__img-wrapper">
-              <picture>
-                <source
-                  type="image/webp"
-                  srcSet="img/content/lemon-pie.webp, img/content/lemon-pie@2x.webp 2x"
-                />
-                <img
-                  src="img/content/lemon-pie.jpg"
-                  srcSet="img/content/lemon-pie@2x.jpg 2x"
-                  width={241}
-                  height={245}
-                  alt="Лимонный чизкейк."
-                />
-              </picture>
-            </div>
-            <span className="card-item__label">Новинка</span>
-          </a>
-          <button className="card-item__favorites">
-            <span className="visually-hidden">Добавить в избранное</span>
-            <svg width={51} height={41} aria-hidden="true">
-              <use xlinkHref="#icon-like" />
-            </svg>
-          </button>
-          <a className="card-item__link" href="#">
-            <h3 className="card-item__title">
-              <span>Лимонный Чизкейк</span>
-            </h3>
-          </a>
-        </div>
-      </li>
-      <li className="random-main__item">
-        <a className="random-main__link" href="#">
-          <div className="random-main__icon-wrapper">
-            <div className="random-main__icon">
-              <svg width={120} height={130} aria-hidden="true">
-                <use xlinkHref="#icon-keks" />
-              </svg>
-            </div>
-          </div>
-          <h3 className="random-main__subtitle">Все кексы</h3>
-        </a>
-      </li>
+      {products.map((product) => (
+        <MainCard key={product.id} {...product} />
+      ))}
     </ul>
   );
 }
