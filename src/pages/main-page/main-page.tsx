@@ -1,12 +1,22 @@
+import { useState } from 'react';
 import LastReview from '../../components/last-review/last-review';
 import MainCardList from '../../components/main-card-list/main-card-list';
+import { addresses } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { getIsLastReview, getLastReview } from '../../store/site-data/selectors';
+import MapAddress from '../../components/map-address/map-address';
+import Map from '../../components/map/map';
 
 function MainPage(): JSX.Element {
   const isLastReview = useAppSelector(getIsLastReview);
   const lastReview = useAppSelector(getLastReview);
 
+  //const addressChecked = input[type="radio"][name="user-agreement"]:checked;
+  const [addressName, setAddressName] = useState<string>(addresses[0].name);
+  const changeAddressHandler = (activeAddress: string) => {
+    setAddressName(activeAddress);
+  };
+  const address = addresses.find((addressItem) => addressItem.name === addressName);
   return (
     <>
       <div className="hero">
@@ -41,90 +51,11 @@ function MainPage(): JSX.Element {
       <section className="map">
         <div className="container">
           <h2 className="map__title">адреса</h2>
-          <div className="map__wrapper" />
+          {(address !== undefined) ? <Map address={address} /> : ''}
           <ul className="map__addresses">
-            <li className="map__address">
-              <div className="custom-toggle custom-toggle--radio custom-toggle--address">
-                <input
-                  type="radio"
-                  defaultValue="user-agreement-10"
-                  id="user-agreement-id-10"
-                  name="user-agreement"
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="user-agreement-id-10"
-                >
-                  Кондитерская 1
-                </label>
-                <address className="custom-toggle__address">
-                  Морской пр. 2А
-                  <svg
-                    className="custom-toggle__icon"
-                    width={26}
-                    height={24}
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref="#icon-keks-footprint" />
-                  </svg>
-                </address>
-              </div>
-            </li>
-            <li className="map__address">
-              <div className="custom-toggle custom-toggle--radio custom-toggle--address">
-                <input
-                  type="radio"
-                  defaultValue="user-agreement-12"
-                  id="user-agreement-id-12"
-                  name="user-agreement"
-                  defaultChecked=""
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="user-agreement-id-12"
-                >
-                  Кондитерская 2
-                </label>
-                <address className="custom-toggle__address">
-                  Морской пр. 2А
-                  <svg
-                    className="custom-toggle__icon"
-                    width={26}
-                    height={24}
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref="#icon-keks-footprint" />
-                  </svg>
-                </address>
-              </div>
-            </li>
-            <li className="map__address">
-              <div className="custom-toggle custom-toggle--radio custom-toggle--address">
-                <input
-                  type="radio"
-                  defaultValue="user-agreement-13"
-                  id="user-agreement-id-13"
-                  name="user-agreement"
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="user-agreement-id-13"
-                >
-                  Производство
-                </label>
-                <address className="custom-toggle__address">
-                  Морской пр. 2А
-                  <svg
-                    className="custom-toggle__icon"
-                    width={26}
-                    height={24}
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref="#icon-keks-footprint" />
-                  </svg>
-                </address>
-              </div>
-            </li>
+            {
+              addresses.map((addressItem) => (<MapAddress key={addressItem.id} {...addressItem} isActive={addressName === addressItem.name} onClick={changeAddressHandler} />))
+            }
           </ul>
         </div>
       </section>

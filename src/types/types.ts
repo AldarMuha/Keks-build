@@ -1,3 +1,5 @@
+import { addressesNames } from '../const';
+
 export type Product = {
   id: string;
   title: string;
@@ -68,4 +70,24 @@ export type UserRegistration = {
 export type UserAuth = {
   email: string;
   password: string;
+}
+
+export type AddressName = typeof addressesNames[number];
+
+export type Location = {
+  latitude: number;
+  longtitude: number;
+  iconMarker: string;
+}
+
+export type TextContent = {
+  name: string;
+  location: string;
+}
+
+export type Address = {
+  id: number;
+  name: AddressName;
+  location: Location;
+  textContent: TextContent;
 }
