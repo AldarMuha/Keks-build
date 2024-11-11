@@ -1,22 +1,13 @@
-import { useState } from 'react';
 import LastReview from '../../components/last-review/last-review';
 import MainCardList from '../../components/main-card-list/main-card-list';
-import { addresses } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { getIsLastReview, getLastReview } from '../../store/site-data/selectors';
-import MapAddress from '../../components/map-address/map-address';
-import Map from '../../components/map/map';
+import MapAddressesSection from '../../components/map-addresses-section/map-addresses-section';
 
 function MainPage(): JSX.Element {
   const isLastReview = useAppSelector(getIsLastReview);
   const lastReview = useAppSelector(getLastReview);
 
-  //const addressChecked = input[type="radio"][name="user-agreement"]:checked;
-  const [addressName, setAddressName] = useState<string>(addresses[0].name);
-  const changeAddressHandler = (activeAddress: string) => {
-    setAddressName(activeAddress);
-  };
-  const address = addresses.find((addressItem) => addressItem.name === addressName);
   return (
     <>
       <div className="hero">
@@ -48,17 +39,7 @@ function MainPage(): JSX.Element {
         </div>
       </section>
       {!isLastReview ? <LastReview {...lastReview} /> : ''}
-      <section className="map">
-        <div className="container">
-          <h2 className="map__title">адреса</h2>
-          {(address !== undefined) ? <Map address={address} /> : ''}
-          <ul className="map__addresses">
-            {
-              addresses.map((addressItem) => (<MapAddress key={addressItem.id} {...addressItem} isActive={addressName === addressItem.name} onClick={changeAddressHandler} />))
-            }
-          </ul>
-        </div>
-      </section>
+      <MapAddressesSection />
     </>
 
   );
