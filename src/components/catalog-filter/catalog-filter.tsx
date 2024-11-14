@@ -1,4 +1,20 @@
+import { useState } from 'react';
+import { useAppSelector } from '../../hooks';
+import { getCategories, getIsCategoriesLoading } from '../../store/site-data/selectors';
+import FilterItemFirst from '../filter-item-first/filter-item-first';
+import FilterItemSecond from '../filter-item-second/filter-item-second';
+
 function CatalogFilter(): JSX.Element {
+  const [categoryActive, setCategoryActive] = useState<string | null>(null);
+  const categories = useAppSelector(getCategories);
+  const isCategoriesLoading = useAppSelector(getIsCategoriesLoading);
+  const categoryActiveItem = categories.find((categoriesItem) => categoriesItem.category === categoryActive);
+  const CategoriesChangeHandler = (categoryItem: string) => {
+    setCategoryActive(categoryItem);
+  };
+  if (isCategoriesLoading) {
+    return <p>Загрузка</p>;
+  }
   return (
     <div className="catalog-filter">
       <div className="container">
@@ -7,119 +23,28 @@ function CatalogFilter(): JSX.Element {
             основы
           </h3>
           <ul className="catalog-filter__list catalog-filter__list--first-level">
-            <li className="catalog-filter__item catalog-filter__item--first-level">
-              <button className="btn btn--filter-first-level" type="button">
-                Бисквит
-              </button>
-            </li>
-            <li className="catalog-filter__item catalog-filter__item--first-level">
-              <button className="btn btn--filter-first-level" type="button">
-                Десерт
-              </button>
-            </li>
-            <li className="catalog-filter__item catalog-filter__item--first-level">
-              <button
-                className="btn is-active btn--filter-first-level"
-                type="button"
-              >
-                Чизкейк
-              </button>
-            </li>
-            <li className="catalog-filter__item catalog-filter__item--first-level">
-              <button className="btn btn--filter-first-level" type="button">
-                Песочное
-              </button>
-            </li>
+            {
+              categories.map((categoryItem) => (
+                <FilterItemFirst key={categoryItem.category} {...categoryItem} onClick={CategoriesChangeHandler} />
+              ))
+            }
           </ul>
         </div>
-        <div className="catalog-filter__second-level">
-          <h3 className="catalog-filter__title catalog-filter__title--second-level">
-            начинки
-          </h3>
-          <ul className="catalog-filter__list catalog-filter__list--second-level">
-            <li className="catalog-filter__item catalog-filter__item--second-level">
-              <div className="custom-toggle custom-toggle--checkbox">
-                <input
-                  type="checkbox"
-                  defaultValue="chocolate"
-                  id="catalog-second-level-id-1"
-                  name="catalog-second-level"
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="catalog-second-level-id-1"
-                >
-                  Шоколадный
-                </label>
-              </div>
-            </li>
-            <li className="catalog-filter__item catalog-filter__item--second-level">
-              <div className="custom-toggle custom-toggle--checkbox">
-                <input
-                  type="checkbox"
-                  defaultValue="vegetarian"
-                  id="catalog-second-level-id-2"
-                  name="catalog-second-level"
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="catalog-second-level-id-2"
-                >
-                  Вегетарианский
-                </label>
-              </div>
-            </li>
-            <li className="catalog-filter__item catalog-filter__item--second-level">
-              <div className="custom-toggle custom-toggle--checkbox">
-                <input
-                  type="checkbox"
-                  defaultValue="new-york"
-                  id="catalog-second-level-id-3"
-                  name="catalog-second-level"
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="catalog-second-level-id-3"
-                >
-                  Нью-Йорк
-                </label>
-              </div>
-            </li>
-            <li className="catalog-filter__item catalog-filter__item--second-level">
-              <div className="custom-toggle custom-toggle--checkbox">
-                <input
-                  type="checkbox"
-                  defaultValue="citric"
-                  id="catalog-second-level-id-4"
-                  name="catalog-second-level"
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="catalog-second-level-id-4"
-                >
-                  Лимонный
-                </label>
-              </div>
-            </li>
-            <li className="catalog-filter__item catalog-filter__item--second-level">
-              <div className="custom-toggle custom-toggle--checkbox">
-                <input
-                  type="checkbox"
-                  defaultValue="vanilla"
-                  id="catalog-second-level-id-5"
-                  name="catalog-second-level"
-                  defaultChecked=""
-                />
-                <label
-                  className="custom-toggle__label"
-                  htmlFor="catalog-second-level-id-5"
-                >
-                  Ваниль
-                </label>
-              </div>
-            </li>
-          </ul>
-        </div>
+        {(categoryActive !== null && categoryActiveItem !== undefined) ?
+          (
+            <div className="catalog-filter__second-level">
+              <h3 className="catalog-filter__title catalog-filter__title--second-level">
+                Начинки
+              </h3>
+              <ul className="catalog-filter__list catalog-filter__list--second-level">
+                {
+                  categoryActiveItem.types.map((type) => (
+                    <FilterItemSecond key={type} type={type} />
+                  ))
+                }
+              </ul>
+            </div>
+          ) : ''}
       </div>
     </div>
   );

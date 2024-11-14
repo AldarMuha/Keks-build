@@ -25,7 +25,7 @@ function RegisterPage(): JSX.Element {
                       type="text"
                       name="user-name-1"
                       placeholder="Имя"
-                      required=""
+                      required
                     />
                   </label>
                 </div>
@@ -36,7 +36,7 @@ function RegisterPage(): JSX.Element {
                       type="email"
                       name="user-mail-1"
                       placeholder="Почта"
-                      required=""
+                      required
                     />
                   </label>
                 </div>
@@ -47,7 +47,7 @@ function RegisterPage(): JSX.Element {
                       type="password"
                       name="user-password-1"
                       placeholder="Пароль"
-                      required=""
+                      required
                     />
                   </label>
                 </div>
@@ -69,10 +69,10 @@ function RegisterPage(): JSX.Element {
             </form>
           </div>
           <p className="register-page__text-wrap">
-            Уже зарегистрированы?{" "}
+            Уже зарегистрированы?
             <a className="register-page__link" href="login-page.html">
               Войдите
-            </a>{" "}
+            </a>
             в свой аккаунт.
           </p>
         </div>

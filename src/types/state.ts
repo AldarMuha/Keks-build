@@ -1,11 +1,15 @@
 import store from '../store';
-import type { Product, Review } from './types';
+import type { Category, Product, ProductId, Review } from './types';
 
 export type SiteData = {
   products: Product[];
   isProductsLoading: boolean;
   isLastReview: boolean;
   lastReview: null | Review;
+  categories: Category[];
+  isCategoriesLoading: boolean;
+  isProductLoading: boolean;
+  product: ProductId | null;
 }
 
 export type State = ReturnType<typeof store.getState>;

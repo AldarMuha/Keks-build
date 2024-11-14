@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Address } from '../../types/types';
 import { useMap } from '../../hooks/use-map';
-import { icon, LayerGroup, layerGroup, Marker } from 'leaflet';
+import { icon, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 type MapAddress = {

@@ -3,6 +3,8 @@ import MainCardList from '../../components/main-card-list/main-card-list';
 import { useAppSelector } from '../../hooks';
 import { getIsLastReview, getLastReview } from '../../store/site-data/selectors';
 import MapAddressesSection from '../../components/map-addresses-section/map-addresses-section';
+import Header from '../../components/header/header';
+import Footer from '../../components/footer/footer';
 
 function MainPage(): JSX.Element {
   const isLastReview = useAppSelector(getIsLastReview);
@@ -10,6 +12,7 @@ function MainPage(): JSX.Element {
 
   return (
     <>
+      <Header />
       <div className="hero">
         <div className="container">
           <div className="hero__img-wrapper">
@@ -38,8 +41,9 @@ function MainPage(): JSX.Element {
           <MainCardList />
         </div>
       </section>
-      {!isLastReview ? <LastReview {...lastReview} /> : ''}
+      {(!isLastReview && lastReview !== null) ? <LastReview {...lastReview} /> : ''}
       <MapAddressesSection />
+      <Footer />
     </>
 
   );

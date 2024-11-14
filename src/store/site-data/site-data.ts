@@ -1,12 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { StoreSlice } from '../../const';
-import { fetchProducts, fetchLastReview } from '../action';
+import { fetchProducts, fetchLastReview, fetchCategory, fetchProduct } from '../action';
 import { SiteData } from '../../types/state';
 
 const initialState: SiteData = {
   products: [],
-  /*product: null,
-  category: [],
+  product: null,
+  isProductLoading: false,
+  categories: [],
+  isCategoriesLoading: false,
+  /*
   favorites: [],
   */
   isProductsLoading: false,
@@ -43,6 +46,26 @@ export const siteData = createSlice({
       })
       .addCase(fetchLastReview.rejected, (state) => {
         state.isLastReview = false;
+      })
+      .addCase(fetchCategory.pending, (state) => {
+        state.isCategoriesLoading = true;
+      })
+      .addCase(fetchCategory.fulfilled, (state, action) => {
+        state.categories = action.payload;
+        state.isCategoriesLoading = false;
+      })
+      .addCase(fetchCategory.rejected, (state) => {
+        state.isCategoriesLoading = false;
+      })
+      .addCase(fetchProduct.pending, (state) => {
+        state.isProductLoading = true;
+      })
+      .addCase(fetchProduct.fulfilled, (state, action) => {
+        state.product = action.payload;
+        state.isProductLoading = false;
+      })
+      .addCase(fetchProduct.rejected, (state) => {
+        state.isProductLoading = false;
       });
   }
 });

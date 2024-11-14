@@ -1,4 +1,6 @@
-function CatalogCard(): JSX.Element {
+import { Product } from '../../types/types';
+
+function CatalogCard({ title, previewImage, previewImageWebp, isNew, isFavorite, price }: Product): JSX.Element {
   return (
     <li className="catalog__item">
       <div className="card-item card-item--big">
@@ -7,29 +9,28 @@ function CatalogCard(): JSX.Element {
             <picture>
               <source
                 type="image/webp"
-                srcSet="img/content/blueberry-cake.webp, img/content/blueberry-cake@2x.webp 2x"
+                srcSet={previewImageWebp}
               />
               <img
-                src="img/content/blueberry-cake.jpg"
-                srcSet="img/content/blueberry-cake@2x.jpg 2x"
+                src={previewImage}
                 width={326}
                 height={332}
                 alt="Торт голубика."
               />
             </picture>
           </div>
-          <span className="card-item__label">Новинка</span>
+          {isNew ? <span className="card-item__label">Новинка</span> : ''}
         </a>
-        <button className="card-item__favorites card-item__favorites--active">
+        <button className={`card-item__favorites${(isFavorite) ? ' card-item__favorites--active' : ''}`} >
           <span className="visually-hidden">Добавить в избранное</span>
           <svg width={51} height={41} aria-hidden="true">
             <use xlinkHref="#icon-like" />
           </svg>
         </button>
-        <span className="card-item__price">9 300 p</span>
+        <span className="card-item__price">{price}</span>
         <a className="card-item__link" href="#">
           <h3 className="card-item__title">
-            <span>Торт Голубика</span>
+            <span>{title}</span>
           </h3>
         </a>
       </div>

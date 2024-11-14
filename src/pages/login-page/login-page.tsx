@@ -25,7 +25,7 @@ function LoginPage(): JSX.Element {
                       type="email"
                       name="user-mail-1"
                       placeholder="Почта"
-                      required=""
+                      required
                     />
                   </label>
                 </div>
@@ -36,7 +36,7 @@ function LoginPage(): JSX.Element {
                       type="password"
                       name="user-password-1"
                       placeholder="Пароль"
-                      required=""
+                      required
                     />
                   </label>
                 </div>
@@ -47,10 +47,10 @@ function LoginPage(): JSX.Element {
             </form>
           </div>
           <p className="login-page__text-wrap">
-            Ещё не зарегистрированы?{" "}
+            Ещё не зарегистрированы?
             <a className="login-page__link" href="register-page.html">
               Создайте
-            </a>{" "}
+            </a>
             аккаунт прямо сейчас.
           </p>
         </div>

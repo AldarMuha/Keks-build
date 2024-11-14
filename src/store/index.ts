@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReduser } from './reducer';
 import { createApi } from '../services/api';
-import { fetchLastReview, fetchProducts } from './action';
+import { fetchCategory, fetchLastReview, fetchProducts } from './action';
 
 const api = createApi();
 const store = configureStore({
@@ -18,5 +18,6 @@ const store = configureStore({
 
 store.dispatch(fetchProducts());
 store.dispatch(fetchLastReview());
+store.dispatch(fetchCategory());
 
 export default store;
