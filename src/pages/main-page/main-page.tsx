@@ -45,7 +45,6 @@ function MainPage(): JSX.Element {
       <MapAddressesSection />
       <Footer />
     </>
-
   );
 }
 

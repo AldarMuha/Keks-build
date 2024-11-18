@@ -1,5 +1,6 @@
+import { AuthorizationStatus } from '../const';
 import store from '../store';
-import type { Category, Product, ProductId, Review } from './types';
+import type { Category, Product, ProductId, Review, User } from './types';
 
 export type SiteData = {
   products: Product[];
@@ -10,6 +11,18 @@ export type SiteData = {
   isCategoriesLoading: boolean;
   isProductLoading: boolean;
   product: ProductId | null;
+  isFavoritesLoading: boolean;
+  favorites: ProductId[];
+}
+
+export type SiteProcess = {
+  shownCards: number;
+}
+
+export type UserProcess = {
+  authorizationStatus: AuthorizationStatus;
+  user: User | string;
+  isUserStatusLoading: boolean;
 }
 
 export type State = ReturnType<typeof store.getState>;

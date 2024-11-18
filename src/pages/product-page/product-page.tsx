@@ -1,9 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getIsProductLoading, getProduct } from '../../store/site-data/selectors';
 import { useEffect } from 'react';
 import { fetchProduct } from '../../store/action';
 import Details from '../../components/details/details';
+import Header from '../../components/header/header';
+import Footer from '../../components/footer/footer';
 
 function ProductPage(): JSX.Element | null {
   const params = useParams();
@@ -28,6 +30,7 @@ function ProductPage(): JSX.Element | null {
   }
   return (
     <>
+      <Header />
       <h1 className="visually-hidden">Карточка: ошибка загрузки комментариев</h1>
       <div className="back-link">
         <div className="container">
@@ -163,6 +166,7 @@ function ProductPage(): JSX.Element | null {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

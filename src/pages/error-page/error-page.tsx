@@ -1,6 +1,10 @@
+import Footer from '../../components/footer/footer';
+import Header from '../../components/header/header';
+
 function ErrorPage(): JSX.Element {
   return (
     <>
+      <Header />
       <h1 className="visually-hidden">Ошибка загрузки страницы</h1>
       <section className="error-loading">
         <div className="container">
@@ -14,6 +18,7 @@ function ErrorPage(): JSX.Element {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

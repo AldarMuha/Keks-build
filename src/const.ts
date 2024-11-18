@@ -11,6 +11,17 @@ export enum AppRoute {
   ProductPage = '/ProductPage',
 }
 
+export enum AuthorizationStatus {
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+  UNKNOWN = 'UNKNOWN',
+}
+
+export enum RegistrationStatus {
+  Registration = 'REGISTRATION',
+  NoRegistration = 'NO_REGISTRATION',
+}
+
 export enum HttpCode {
   NotFound = 404
 }

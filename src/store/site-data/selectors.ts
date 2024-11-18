@@ -1,3 +1,4 @@
+import { createSelector } from '@reduxjs/toolkit';
 import { StoreSlice } from '../../const';
 import { State } from '../../types/state';
 import type { Product, ProductId } from '../../types/types';
@@ -14,3 +15,9 @@ export const getIsCategoriesLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: Sta
 export const getCategories = ({ [StoreSlice.SiteData]: SITE_DATA }: State): Category[] => SITE_DATA.categories;
 export const getIsProductLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: State): boolean => SITE_DATA.isCategoriesLoading;
 export const getProduct = ({ [StoreSlice.SiteData]: SITE_DATA }: State): ProductId | null => SITE_DATA.product;
+//export const getIsFavoritesLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: State): boolean => SITE_DATA.isFavoritesLoading;
+//export const getFavorites = ({ [StoreSlice.SiteData]: SITE_DATA }: State): ProductId[] => SITE_DATA.favorites;
+export const selectProducts = createSelector(
+  [getProducts, getCategories],
+  (products, categories) => products.filter((product) => categories.find((categoryItem) => categoryItem.category === product.category))
+);

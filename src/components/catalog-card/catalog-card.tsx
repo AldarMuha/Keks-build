@@ -1,10 +1,12 @@
+import { Link } from 'react-router-dom';
 import { Product } from '../../types/types';
+import { AppRoute } from '../../const';
 
-function CatalogCard({ title, previewImage, previewImageWebp, isNew, isFavorite, price }: Product): JSX.Element {
+function CatalogCard({ id, title, previewImage, previewImageWebp, isNew, isFavorite, price }: Product): JSX.Element {
   return (
     <li className="catalog__item">
       <div className="card-item card-item--big">
-        <a className="card-item__img-link" href="#">
+        <Link className="card-item__img-link" to={`${AppRoute.ProductPage}/${id}`}>
           <div className="card-item__img-wrapper">
             <picture>
               <source
@@ -20,7 +22,7 @@ function CatalogCard({ title, previewImage, previewImageWebp, isNew, isFavorite,
             </picture>
           </div>
           {isNew ? <span className="card-item__label">Новинка</span> : ''}
-        </a>
+        </Link>
         <button className={`card-item__favorites${(isFavorite) ? ' card-item__favorites--active' : ''}`} >
           <span className="visually-hidden">Добавить в избранное</span>
           <svg width={51} height={41} aria-hidden="true">

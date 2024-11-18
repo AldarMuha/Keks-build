@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReduser } from './reducer';
 import { createApi } from '../services/api';
-import { fetchCategory, fetchLastReview, fetchProducts } from './action';
+import { fetchCategory, fetchLastReview, fetchProducts, fetchUserStatus } from './action';
+import history from '../history';
 
 const api = createApi();
 const store = configureStore({
@@ -10,14 +11,17 @@ const store = configureStore({
     getDefaultMiddleware({
       thunk: {
         extraArgument: {
-          api
+          api,
+          history,
         }
       }
     })
 });
 
+store.dispatch(fetchUserStatus());
 store.dispatch(fetchProducts());
 store.dispatch(fetchLastReview());
 store.dispatch(fetchCategory());
+
 
 export default store;

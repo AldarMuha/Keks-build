@@ -1,11 +1,13 @@
-import type { AxiosInstance } from 'axios';
+import type {/* AxiosError, */AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { Product, ProductId, Category, Review, UserAuth, User, UserRegistration } from '../types/types';
-//import { AppRoute, HttpCode } from '../const';
+import axios from 'axios';
+//import { HttpCode } from '../const';
 
 const Action = {
   FETCH_PRODUCTS: 'products/fetch',
   FETCH_PRODUCT: 'products/productId-fetch',
+  //SHOW_PRODUCTS_PARTS: 'products/show-parts',
 
   FETCH_CATEGORY: 'category/fetch',
 
@@ -26,6 +28,7 @@ const Action = {
 
 type Extra = {
   api: AxiosInstance;
+  history: History;
 }
 
 export const fetchProducts = createAsyncThunk<Product[], undefined, { extra: Extra }>(
@@ -37,22 +40,22 @@ export const fetchProducts = createAsyncThunk<Product[], undefined, { extra: Ext
   }
 );
 
+//export const showProductsParts = createAction<number>(Action.SHOW_PRODUCTS_PARTS);
+
 export const fetchProduct = createAsyncThunk<ProductId, Product['id'], { extra: Extra }>(
   Action.FETCH_PRODUCT,
   async (id, { extra }) => {
     const { api } = extra;
-    try {
-      const { data } = await api.get<ProductId>(`/v0/keks/products/${id}`);
-      return data;
-    } catch (error) {
-      //const axiosError = error as AxiosError;
-      /*
-      if (axiosError.response?.status === HttpCode.NotFound) {
-        console.log(AppRoute.NotPage);
-      }
-        */
-      return Promise.reject(error);
-    }
+    //try {
+    const { data } = await api.get<ProductId>(`/v0/keks/products/${id}`);
+    return data;
+    /* } catch (error) {
+       const axiosError = error as AxiosError;
+       if (axiosError.response?.status === HttpCode.NotFound) {
+         history.back();
+       }
+       return Promise.reject(error);
+     }*/
   });
 
 export const fetchCategory = createAsyncThunk<Category[], undefined, { extra: Extra }>(
@@ -130,12 +133,21 @@ export const registrationUser = createAsyncThunk<User, UserRegistration, { extra
 export const uploadAvatarUser = createAsyncThunk<User,
 */
 
-export const fetchUserStatus = createAsyncThunk<User, User['token'], { extra: Extra }>(
+export const fetchUserStatus = createAsyncThunk<User, void, { extra: Extra }>(
   Action.FETCH_USER_STATUS,
   async (_, { extra }) => {
-    const { api } = extra;
-    const { data } = await api.get<User>('/v0/keks/users/login');
-    return data;
+    try {
+      const { api } = extra;
+      const { data } = await api.get<User>('/v0/keks/users/login');
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw error;
+      } else {
+        throw new Error('error');
+      }
+    }
+
   }
 );
 

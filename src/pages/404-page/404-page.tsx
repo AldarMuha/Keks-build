@@ -1,6 +1,9 @@
+import Header from '../../components/header/header';
+
 function NotPage(): JSX.Element {
   return (
     <>
+      <Header />
       <h1 className="visually-hidden">404</h1>
       <section className="error-page">
         <div className="container">

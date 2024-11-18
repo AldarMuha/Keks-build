@@ -2,6 +2,7 @@ import CatalogList from '../../components/catalog-list/catalog-list';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import CatalogFilter from '../../components/catalog-filter/catalog-filter';
+import ShowMoreButton from '../../components/show-more-button/show-more-button';
 
 function CatalogPage(): JSX.Element {
   return (
@@ -30,9 +31,7 @@ function CatalogPage(): JSX.Element {
           <div className="catalog__wrapper">
             <CatalogList />
             <div className="catalog__button-wrapper">
-              <button className="btn btn--second" type="button">
-                Показать еще
-              </button>
+              <ShowMoreButton />
             </div>
           </div>
         </div>
