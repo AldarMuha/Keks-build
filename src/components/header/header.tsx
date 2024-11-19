@@ -1,4 +1,40 @@
+import { Link } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getAuthorizationStatus, getIsUserStatusLoading, getUser } from '../../store/user-process/selectors';
+import Spinner from '../spinner/spinner';
+import { logoutUser } from '../../store/action';
+
 function Header(): JSX.Element {
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isUserStatusLoading = useAppSelector(getIsUserStatusLoading);
+  const user = useAppSelector(getUser);
+  const dispatch = useAppDispatch();
+  const unauthorizatedHandler = () => {
+    dispatch(logoutUser());
+  };
+  if (isUserStatusLoading) {
+    return <Spinner />;
+  }
+  if (authorizationStatus === AuthorizationStatus.NoAuth) {
+    return (
+      <header className="header">
+        <div className="container">
+          <div className="header__inner"><a className="header__logo" href="index.html" aria-label="Переход на главную"><img src="img/svg/logo.svg" width="170" height="69" alt="Кондитерская кекс" /></a>
+            <div className="header__buttons">
+              <div className="header__btn">
+                <Link className="btn btn--third header__link header__link--reg" to={AppRoute.Registre}>Регистрация</Link>
+              </div>
+              <div className="header__btn">
+                <Link className="btn" to={AppRoute.Login}>Войти</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="header header--authorized">
       <div className="container">
@@ -28,7 +64,7 @@ function Header(): JSX.Element {
                   />
                 </picture>
               </div>
-              <p className="header__user-mail">keks@academy.ru</p>
+              <p className="header__user-mail">{user}</p>
             </div>
           </div>
           <div className="header__buttons">
@@ -43,9 +79,9 @@ function Header(): JSX.Element {
             </a>
             <div className="header__buttons-authorized">
               <div className="header__btn">
-                <a className="btn btn--second" href="#">
+                <button className="btn btn--second" onClick={unauthorizatedHandler}>
                   Выйти
-                </a>
+                </button>
               </div>
             </div>
           </div>

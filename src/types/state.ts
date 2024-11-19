@@ -21,7 +21,7 @@ export type SiteProcess = {
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus;
-  user: User | string;
+  user: User['email'];
   isUserStatusLoading: boolean;
 }
 

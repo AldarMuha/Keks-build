@@ -23,7 +23,8 @@ export enum RegistrationStatus {
 }
 
 export enum HttpCode {
-  NotFound = 404
+  NotFound = 404,
+  NoAuth = 401,
 }
 
 export enum StoreSlice {

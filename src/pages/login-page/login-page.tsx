@@ -1,4 +1,20 @@
+import { FormEvent } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { UserAuth } from '../../types/types';
+import { loginUser } from '../../store/action';
+
 function LoginPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data: UserAuth = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    };
+    dispatch(loginUser(data));
+  };
   return (
     <section className="login-page">
       <div className="login-page__header">
@@ -16,14 +32,14 @@ function LoginPage(): JSX.Element {
         <div className="login-page__inner">
           <h1 className="login-page__title">Вход</h1>
           <div className="login-page__form">
-            <form action="#" method="post" autoComplete="off">
+            <form action="https://grading.design.htmlacademy.pro" method="post" autoComplete="off" onSubmit={onSubmitHandler}>
               <div className="login-page__fields">
                 <div className="custom-input login-page__field">
                   <label>
                     <span className="custom-input__label">Введите вашу почту</span>
                     <input
                       type="email"
-                      name="user-mail-1"
+                      name="email"
                       placeholder="Почта"
                       required
                     />
@@ -34,7 +50,7 @@ function LoginPage(): JSX.Element {
                     <span className="custom-input__label">Введите ваш пароль</span>
                     <input
                       type="password"
-                      name="user-password-1"
+                      name="password"
                       placeholder="Пароль"
                       required
                     />

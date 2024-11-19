@@ -19,7 +19,7 @@ export const userProcess = createSlice({
         state.isUserStatusLoading = true;
       })
       .addCase(fetchUserStatus.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = action.payload.email;
         state.authorizationStatus = AuthorizationStatus.Auth;
         state.isUserStatusLoading = false;
       })
@@ -29,12 +29,15 @@ export const userProcess = createSlice({
       })
       .addCase(registrationUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.authorizationStatus = AuthorizationStatus.Auth;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.authorizationStatus = AuthorizationStatus.Auth;
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = '';
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
       });
   }
 });

@@ -1,4 +1,21 @@
+import { FormEvent } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { UserRegistration } from '../../types/types';
+import { registrationUser } from '../../store/action';
+
 function RegisterPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data: UserRegistration = {
+      name: formData.get('user-name') as string,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    };
+    dispatch(registrationUser(data));
+  };
   return (
     <section className="register-page">
       <div className="register-page__header">
@@ -16,14 +33,14 @@ function RegisterPage(): JSX.Element {
         <div className="register-page__inner">
           <h1 className="register-page__title">Регистрация</h1>
           <div className="register-page__form">
-            <form action="#" method="post" autoComplete="off">
+            <form action="https://grading.design.htmlacademy.pro" method="post" autoComplete="off" onSubmit={onSubmitHandler}>
               <div className="register-page__fields">
                 <div className="custom-input register-page__field">
                   <label>
                     <span className="custom-input__label">Введите ваше имя</span>
                     <input
                       type="text"
-                      name="user-name-1"
+                      name="user-name"
                       placeholder="Имя"
                       required
                     />
@@ -34,7 +51,7 @@ function RegisterPage(): JSX.Element {
                     <span className="custom-input__label">Введите вашу почту</span>
                     <input
                       type="email"
-                      name="user-mail-1"
+                      name="email"
                       placeholder="Почта"
                       required
                     />
@@ -45,7 +62,7 @@ function RegisterPage(): JSX.Element {
                     <span className="custom-input__label">Введите ваш пароль</span>
                     <input
                       type="password"
-                      name="user-password-1"
+                      name="password"
                       placeholder="Пароль"
                       required
                     />

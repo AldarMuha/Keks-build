@@ -1,8 +1,9 @@
-import type {/* AxiosError, */AxiosInstance } from 'axios';
+import type { AxiosError, AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { History } from 'history';
 import type { Product, ProductId, Category, Review, UserAuth, User, UserRegistration } from '../types/types';
-import axios from 'axios';
-//import { HttpCode } from '../const';
+import { AppRoute, HttpCode } from '../const';
+import { Token } from '../utils/token';
 
 const Action = {
   FETCH_PRODUCTS: 'products/fetch',
@@ -45,17 +46,17 @@ export const fetchProducts = createAsyncThunk<Product[], undefined, { extra: Ext
 export const fetchProduct = createAsyncThunk<ProductId, Product['id'], { extra: Extra }>(
   Action.FETCH_PRODUCT,
   async (id, { extra }) => {
-    const { api } = extra;
-    //try {
-    const { data } = await api.get<ProductId>(`/v0/keks/products/${id}`);
-    return data;
-    /* } catch (error) {
-       const axiosError = error as AxiosError;
-       if (axiosError.response?.status === HttpCode.NotFound) {
-         history.back();
-       }
-       return Promise.reject(error);
-     }*/
+    const { api, history } = extra;
+    try {
+      const { data } = await api.get<ProductId>(`/v0/keks/products/${id}`);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === HttpCode.NotFound) {
+        history.push(AppRoute.NotPage);
+      }
+      return Promise.reject(error);
+    }
   });
 
 export const fetchCategory = createAsyncThunk<Category[], undefined, { extra: Extra }>(
@@ -121,12 +122,14 @@ export const fetchLastReview = createAsyncThunk<Review, undefined, { extra: Extr
   }
 );
 
-export const registrationUser = createAsyncThunk<User, UserRegistration, { extra: Extra }>(
+export const registrationUser = createAsyncThunk<UserRegistration['email'], UserRegistration, { extra: Extra }>(
   Action.REGISTRATION_USER,
   async ({ name, email, password }, { extra }) => {
     const { api } = extra;
-    const { data } = await api.post<User>('/v0/keks/users/registration', { name, email, password });
-    return data;
+    const { data } = await api.post<User & { token: string }>('/v0/keks/users/registration', { name, email, password });
+    const { token } = data;
+    Token.save(token);
+    return email;
   }
 );
 /*
@@ -141,22 +144,25 @@ export const fetchUserStatus = createAsyncThunk<User, void, { extra: Extra }>(
       const { data } = await api.get<User>('/v0/keks/users/login');
       return data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw error;
-      } else {
-        throw new Error('error');
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === HttpCode.NoAuth) {
+        Token.drop();
       }
+      return Promise.reject(error);
     }
 
   }
 );
 
-export const loginUser = createAsyncThunk<User, UserAuth, { extra: Extra }>(
+export const loginUser = createAsyncThunk<UserAuth['email'], UserAuth, { extra: Extra }>(
   Action.LOGIN_USER,
   async ({ email, password }, { extra }) => {
-    const { api } = extra;
+    const { api, history } = extra;
     const { data } = await api.post<User>('/v0/keks/users/login', { email, password });
-    return data;
+    const { token } = data;
+    Token.save(token);
+    history.push(AppRoute.Root);
+    return email;
   }
 );
 
@@ -165,4 +171,5 @@ export const logoutUser = createAsyncThunk<void, undefined, { extra: Extra }>(
   async (_, { extra }) => {
     const { api } = extra;
     await api.delete('/v0/keks/users/logout');
+    Token.drop();
   });
