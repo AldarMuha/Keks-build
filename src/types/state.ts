@@ -13,10 +13,13 @@ export type SiteData = {
   product: ProductId | null;
   isFavoritesLoading: boolean;
   favorites: ProductId[];
+  reviews: Review[];
+  isReviewsLoading: boolean;
 }
 
 export type SiteProcess = {
   shownCards: number;
+  activeCategory: string;
 }
 
 export type UserProcess = {

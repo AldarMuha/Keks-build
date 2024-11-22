@@ -1,11 +1,11 @@
 import { useAppSelector } from '../../hooks';
-import { getIsProductsLoading, getProducts } from '../../store/site-data/selectors';
+import { getIsProductsLoading, selectProducts } from '../../store/site-data/selectors';
 import { getShownCards } from '../../store/site-process/selectors';
 import CatalogCard from '../catalog-card/catalog-card';
 
 function CatalogList(): JSX.Element {
   const isProductsLoading = useAppSelector(getIsProductsLoading);
-  const products = useAppSelector(getProducts);
+  const products = useAppSelector(selectProducts);
   const shownCards = useAppSelector(getShownCards);
   if (isProductsLoading) {
     return <p>Загрузка....</p>;

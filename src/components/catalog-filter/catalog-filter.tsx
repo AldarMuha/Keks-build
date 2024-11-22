@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getCategories, getIsCategoriesLoading } from '../../store/site-data/selectors';
 import FilterItemFirst from '../filter-item-first/filter-item-first';
-import FilterItemSecond from '../filter-item-second/filter-item-second';
+//import FilterItemSecond from '../filter-item-second/filter-item-second';
+import { setCategory } from '../../store/site-process/site-process';
 
 function CatalogFilter(): JSX.Element {
-  const [categoryActive, setCategoryActive] = useState<string | null>(null);
+  //const [categoryActive, setCategoryActive] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
   const categories = useAppSelector(getCategories);
   const isCategoriesLoading = useAppSelector(getIsCategoriesLoading);
-  const categoryActiveItem = categories.find((categoriesItem) => categoriesItem.category === categoryActive);
+  //const categoryActiveItem = categories.find((categoriesItem) => categoriesItem.category === categoryActive);
   const CategoriesChangeHandler = (categoryItem: string) => {
-    setCategoryActive(categoryItem);
+    dispatch(setCategory(categoryItem));
   };
   if (isCategoriesLoading) {
     return <p>Загрузка</p>;
@@ -30,21 +31,15 @@ function CatalogFilter(): JSX.Element {
             }
           </ul>
         </div>
-        {(categoryActive !== null && categoryActiveItem !== undefined) ?
-          (
-            <div className="catalog-filter__second-level">
-              <h3 className="catalog-filter__title catalog-filter__title--second-level">
-                Начинки
-              </h3>
-              <ul className="catalog-filter__list catalog-filter__list--second-level">
-                {
-                  categoryActiveItem.types.map((type) => (
-                    <FilterItemSecond key={type} type={type} />
-                  ))
-                }
-              </ul>
-            </div>
-          ) : ''}
+        <div className="catalog-filter__second-level">
+          <h3 className="catalog-filter__title catalog-filter__title--second-level">
+            Начинки
+          </h3>
+          <ul className="catalog-filter__list catalog-filter__list--second-level">
+
+          </ul>
+        </div>
+
       </div>
     </div>
   );

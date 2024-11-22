@@ -86,7 +86,7 @@ export const putFavorite = createAsyncThunk<ProductId[], ProductId['id'], { extr
   }
 );
 
-export const deleteFavorite = createAsyncThunk<ProductId[], Product['id'], { extra: Extra }>(
+export const deleteFavorite = createAsyncThunk<ProductId[], ProductId['id'], { extra: Extra }>(
   Action.DELETE_FAVORITE,
   async (id, { extra }) => {
     const { api } = extra;
