@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import type { Review } from '../../types/types';
 
 function LastReview({ isoDate, user, positive, negative }: Review): JSX.Element {
@@ -8,7 +9,7 @@ function LastReview({ isoDate, user, positive, negative }: Review): JSX.Element 
         <div className="review">
           <div className="review__inner-wrapper review__inner-wrapper--border">
             <time className="review__date" dateTime={isoDate}>
-              {isoDate}
+              {dayjs(isoDate).format('DD.MM')}
             </time>
             <span className="review__author">Уважаемый(-ая) {user.name}</span>
             <div className="star-rating">

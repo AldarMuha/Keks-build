@@ -47,12 +47,12 @@ function CatalogCard({ id, title, previewImage, previewImageWebp, isNew, isFavor
             </button>
             : ''
         }
-        <span className="card-item__price">{price}</span>
-        <a className="card-item__link" href="#">
+        <span className="card-item__price">{price} р</span>
+        <Link className="card-item__link" to={`${AppRoute.ProductPage}/${id}`}>
           <h3 className="card-item__title">
             <span>{title}</span>
           </h3>
-        </a>
+        </Link>
       </div>
     </li>
   );

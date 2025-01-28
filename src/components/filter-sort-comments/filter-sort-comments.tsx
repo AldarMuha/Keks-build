@@ -1,4 +1,29 @@
-function FilterSortComments(): JSX.Element {
+import { useNavigate } from 'react-router-dom';
+import { AppRoute, FilterRating, Sorting } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchReviews } from '../../store/action';
+//import { getReviews } from '../../store/site-data/selectors';
+import { getFilterRating, getSorting } from '../../store/site-process/selectors';
+import { setSorting } from '../../store/site-process/site-process';
+import { Product } from '../../types/types';
+import FilterRatingItem from '../filter-rating-item/filter-rating-item';
+
+function FilterSortComments({ id }: Product): JSX.Element {
+  const activeSorting = useAppSelector(getSorting);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  //const comments = useAppSelector(getReviews);
+  const activeFilter = useAppSelector(getFilterRating);
+  const onButtonDescendingClick = () => {
+    dispatch(setSorting(Sorting.DateDescending));
+    dispatch(fetchReviews(id));
+    navigate(`${AppRoute.ProductPage}/${id}`);
+  };
+  const onButtonAscendingClick = () => {
+    dispatch(setSorting(Sorting.DateAscending));
+    dispatch(fetchReviews(id));
+    navigate(`${AppRoute.ProductPage}/${id}`);
+  };
   return (
     <div className="filter-sort">
       <div className="container">
@@ -18,44 +43,11 @@ function FilterSortComments(): JSX.Element {
                 </svg>
               </button>
               <ul className="filter-sort__filter-list">
-                <li className="filter-sort__filter-item">
-                  <div className="custom-toggle custom-toggle--sorting">
-                    <input
-                      type="radio"
-                      id="review-sort-1"
-                      name="review-sort"
-                      defaultChecked
-                    />
-                    <label
-                      className="custom-toggle__label"
-                      htmlFor="review-sort-1"
-                    >
-                      Любой
-                    </label>
-                  </div>
-                </li>
-                <li className="filter-sort__filter-item">
-                  <div className="custom-toggle custom-toggle--sorting">
-                    <input type="radio" id="review-sort-2" name="review-sort" />
-                    <label
-                      className="custom-toggle__label"
-                      htmlFor="review-sort-2"
-                    >
-                      Высокий
-                    </label>
-                  </div>
-                </li>
-                <li className="filter-sort__filter-item">
-                  <div className="custom-toggle custom-toggle--sorting">
-                    <input type="radio" id="review-sort-3" name="review-sort" />
-                    <label
-                      className="custom-toggle__label"
-                      htmlFor="review-sort-3"
-                    >
-                      Низкий
-                    </label>
-                  </div>
-                </li>
+                {
+                  Object.values(FilterRating).map((filterItem) => (
+                    <FilterRatingItem key={filterItem} filterItem={filterItem} filterActive={activeFilter} />
+                  ))
+                }
               </ul>
             </div>
           </div>
@@ -63,9 +55,11 @@ function FilterSortComments(): JSX.Element {
             <h3 className="filter-sort__sort-title">Сортировать по дате</h3>
             <div className="filter-sort__sort-btns-wrap">
               <button
-                className="filter-sort__sort-btn filter-sort__sort-btn--inc filter-sort__sort-btn--active"
+                className={`filter-sort__sort-btn filter-sort__sort-btn--inc${(activeSorting === Sorting.DateAscending) ? ' filter-sort__sort-btn--active' : ''}`}
+                name={Sorting.DateAscending}
                 type="button"
                 aria-label="сортировка по возрастанию"
+                onClick={onButtonAscendingClick}
               >
                 <svg
                   className="filter-sort__sort-icon"
@@ -77,9 +71,11 @@ function FilterSortComments(): JSX.Element {
                 </svg>
               </button>
               <button
-                className="filter-sort__sort-btn filter-sort__sort-btn--desc"
+                className={`filter-sort__sort-btn filter-sort__sort-btn--des ${(activeSorting === Sorting.DateDescending) ? ' filter-sort__sort-btn--active' : ''}`}
+                name={Sorting.DateDescending}
                 type="button"
                 aria-label="сортировка по убыванию"
+                onClick={onButtonDescendingClick}
               >
                 <svg
                   className="filter-sort__sort-icon"

@@ -1,5 +1,29 @@
+import { AuthorizationStatus } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchProduct, deleteFavorite, putFavorite } from '../../store/action';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { ProductId } from '../../types/types';
-function Details({ title, price, weight, previewImageWebp, previewImage, isNew, description }: ProductId): JSX.Element {
+function Details({ id, title, price, weight, previewImageWebp, previewImage, isNew, description, rating, isFavorite }: ProductId): JSX.Element {
+  const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  let descriptinShow = description.length > 140 ? description.slice(0, 140) : description;
+  const showMoreHandler = () => {
+    descriptinShow = description;
+  };
+  const likeClickHandler = () => {
+    if (!isFavorite) {
+      dispatch(putFavorite(id));
+    } else {
+      dispatch(deleteFavorite(id));
+    }
+    dispatch(fetchProduct(id));
+    // dispatch(fetchProducts());
+  };
+  const ratingStars = Array.from({ length: Math.round(rating) }, (_, i) => (
+    <svg className="star-rating__star star-rating__star--active" width="30" height="30" aria-hidden="true" key={i}>
+      <use xlinkHref="#icon-star"></use>
+    </svg>
+  ));
   return (
     <section className="item-details item-details--form-open">
       <div className="container">
@@ -29,66 +53,38 @@ function Details({ title, price, weight, previewImageWebp, previewImage, isNew, 
             </div>
             <div className="item-details__review-wrapper">
               <div className="star-rating star-rating--big">
-                <svg
-                  className="star-rating__star star-rating__star--active"
-                  width={30}
-                  height={30}
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#icon-star" />
-                </svg>
-                <svg
-                  className="star-rating__star star-rating__star--active"
-                  width={30}
-                  height={30}
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#icon-star" />
-                </svg>
-                <svg
-                  className="star-rating__star star-rating__star--active"
-                  width={30}
-                  height={30}
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#icon-star" />
-                </svg>
-                <svg
-                  className="star-rating__star star-rating__star--active"
-                  width={30}
-                  height={30}
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#icon-star" />
-                </svg>
-                <svg
-                  className="star-rating__star star-rating__star--active"
-                  width={30}
-                  height={30}
-                  aria-hidden="true"
-                >
-                  <use xlinkHref="#icon-star" />
-                </svg>
-                <span className="star-rating__count">26</span>
+                {
+                  ratingStars
+                }
+                <span className="star-rating__count">{Math.round(rating)}</span>
               </div>
               <div className="item-details__text-wrapper">
                 <span className="item-details__text">
-                  {description}
+                  {descriptinShow}
                 </span>
-                <button className="item-details__more">
-                  <span className="visually-hidden">Читать полностью</span>
-                  <svg width={27} height={17} aria-hidden="true">
-                    <use xlinkHref="#icon-more" />
-                  </svg>
-                </button>
+                {
+                  (description.length > 140)
+                    ?
+                    <button className="item-details__more" onClick={showMoreHandler}>
+                      <span className="visually-hidden">Читать полностью</span>
+                      <svg width={27} height={17} aria-hidden="true">
+                        <use xlinkHref="#icon-more" />
+                      </svg>
+                    </button>
+                    : ''
+                }
               </div>
               <div className="item-details__button-wrapper">
-                <button className="item-details__like-button">
-                  <svg width={45} height={37} aria-hidden="true">
-                    <use xlinkHref="#icon-like" />
-                  </svg>
-                  <span className="visually-hidden">Понравилось</span>
-                </button>
+                {(authorizationStatus === AuthorizationStatus.Auth)
+                  ?
+                  <button className={`item-details__like-button${isFavorite ? ' item-details__like-button--active' : ''}`} onClick={likeClickHandler}>
+                    <svg width={45} height={37} aria-hidden="true">
+                      <use xlinkHref="#icon-like" />
+                    </svg>
+                    <span className="visually-hidden">Понравилось</span>
+                  </button>
+                  : ''}
+
                 <button className="btn btn--second" type="button">
                   Отменить отзыв
                 </button>

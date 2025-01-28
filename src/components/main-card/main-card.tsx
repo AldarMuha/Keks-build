@@ -1,6 +1,10 @@
 //import { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { AuthorizationStatus } from '../../const';
+import { fetchProducts, fetchFavorite, putFavorite, deleteFavorite } from '../../store/action';
 //import { Link } from 'react-router-dom';
 
 type CardType = {
@@ -13,7 +17,17 @@ type CardType = {
 }
 
 function MainCard({ id, title, previewImage, previewImageWebp, isNew, isFavorite }: CardType): JSX.Element {
-
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
+  const favoritesButtonClickHandler = () => {
+    if (!isFavorite) {
+      dispatch(putFavorite(id));
+    } else {
+      dispatch(deleteFavorite(id));
+    }
+    dispatch(fetchFavorite());
+    dispatch(fetchProducts());
+  };
   return (
     <li className="random-main__item">
       <div className="card-item">
@@ -35,12 +49,16 @@ function MainCard({ id, title, previewImage, previewImageWebp, isNew, isFavorite
           </div>
           {isNew ? <span className="card-item__label">Новинка</span> : ''}
         </Link>
-        <button className={`card-item__favorites${(isFavorite) ? ' card-item__favorites--active' : ''}`} >
-          <span className="visually-hidden">Добавить в избранное</span>
-          <svg width={51} height={41} aria-hidden="true">
-            <use xlinkHref="#icon-like" />
-          </svg>
-        </button>
+        {
+          (authorizationStatus === AuthorizationStatus.Auth) ?
+            <button className={`card-item__favorites ${(isFavorite) ? ' card-item__favorites--active' : ''}`} onClick={favoritesButtonClickHandler}>
+              <span className="visually-hidden">Добавить в избранное</span>
+              <svg width={51} height={41} aria-hidden="true">
+                <use xlinkHref="#icon-like" />
+              </svg>
+            </button>
+            : ''
+        }
         <Link className="card-item__link" to={`${AppRoute.ProductPage}/${id}`}>
           <h3 className="card-item__title">
             <span>{title}</span>

@@ -5,6 +5,8 @@ import { getIsLastReview, getLastReview } from '../../store/site-data/selectors'
 import MapAddressesSection from '../../components/map-addresses-section/map-addresses-section';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 function MainPage(): JSX.Element {
   const isLastReview = useAppSelector(getIsLastReview);
@@ -28,9 +30,9 @@ function MainPage(): JSX.Element {
             <p className="hero__subtitle">Твоя пушистая кондитерская</p>
             <p className="hero__title">КЕКС</p>
             <div className="hero__button-wrapper">
-              <a className="btn" href="catalog-page.html">
+              <Link className="btn" to={AppRoute.Catalog}>
                 Скорее смотреть
-              </a>
+              </Link>
             </div>
           </div>
         </div>

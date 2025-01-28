@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { StoreSlice } from '../../const';
-import { fetchProducts, fetchLastReview, fetchCategory, fetchProduct, fetchFavorite, putFavorite, deleteFavorite, fetchReviews } from '../action';
+import { fetchProducts, fetchLastReview, fetchCategory, fetchProduct, fetchFavorite, putFavorite, deleteFavorite, fetchReviews, postReview } from '../action';
 import { SiteData } from '../../types/state';
 
 const initialState: SiteData = {
@@ -89,6 +89,9 @@ export const siteData = createSlice({
       })
       .addCase(fetchReviews.rejected, (state) => {
         state.isReviewsLoading = false;
+      })
+      .addCase(postReview.fulfilled, (state, action) => {
+        state.reviews.push(action.payload);
       });
   }
 });

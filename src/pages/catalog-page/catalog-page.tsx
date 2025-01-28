@@ -3,6 +3,8 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import CatalogFilter from '../../components/catalog-filter/catalog-filter';
 import ShowMoreButton from '../../components/show-more-button/show-more-button';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 function CatalogPage(): JSX.Element {
   return (
@@ -11,7 +13,7 @@ function CatalogPage(): JSX.Element {
       <h1 className="visually-hidden">Каталог товаров</h1>
       <div className="back-link">
         <div className="container">
-          <a className="back-link__link" href="#">
+          <Link className="back-link__link" to={AppRoute.Root}>
             Назад
             <svg
               className="back-link__icon"
@@ -21,7 +23,7 @@ function CatalogPage(): JSX.Element {
             >
               <use xlinkHref="#icon-arrow-left" />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
       <CatalogFilter />

@@ -1,4 +1,4 @@
-import { Address } from './types/types';
+import { Address, Review, SortName } from './types/types';
 
 export enum AppRoute {
   Root = '/',
@@ -32,6 +32,24 @@ export enum StoreSlice {
   SiteProcess = 'SITE_PROCESS',
   UserProcess = 'USER_PROCESS',
 }
+
+export enum Sorting {
+  DateAscending = 'DateAscending',
+  DateDescending = 'DateDescending',
+}
+
+export enum FilterRating {
+  Any = 'Any',
+  High = 'High',
+  Short = 'Short',
+}
+
+export const Comparator: {
+  [key in SortName]: (a: Review, b: Review) => number;
+} = {
+  DateAscending: (a, b) => new Date(a.isoDate).getTime() - new Date(b.isoDate).getTime(),
+  DateDescending: (a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime(),
+};
 
 export const addressesNames = ['confectionery-1', 'confectionery-2', 'factory'];
 

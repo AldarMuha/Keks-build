@@ -1,9 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { StoreSlice } from '../../const';
+import { Comparator, FilterRating, StoreSlice } from '../../const';
 import { State } from '../../types/state';
 import type { Product, ProductId } from '../../types/types';
 import type { Review, Category } from '../../types/types';
-import { getCategory } from '../site-process/selectors';
+import { getCategory, getFilterRating, getSorting, getTypes } from '../site-process/selectors';
 
 export const getIsProductsLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: State): boolean =>
   SITE_DATA.isProductsLoading;
@@ -18,7 +18,33 @@ export const getIsProductLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: State)
 export const getProduct = ({ [StoreSlice.SiteData]: SITE_DATA }: State): ProductId | null => SITE_DATA.product;
 export const getIsFavoritesLoading = ({ [StoreSlice.SiteData]: SITE_DATA }: State): boolean => SITE_DATA.isFavoritesLoading;
 export const getFavorites = ({ [StoreSlice.SiteData]: SITE_DATA }: State): ProductId[] => SITE_DATA.favorites;
+export const getReviews = ({ [StoreSlice.SiteData]: SITE_DATA }: State): Review[] => SITE_DATA.reviews;
 export const selectProducts = createSelector(
-  [getProducts, getCategory],
-  (products, category) => (category !== 'All') ? products.filter((product) => product.category === category) : products
+  [getProducts, getCategory, getTypes],
+  (products, category, types) => {
+    if (category !== 'All') {
+      const newProducts = products.filter((product) => product.category === category);
+      if (types.length > 0) {
+        return newProducts.filter((newProduct) => types.some((type) => type === newProduct.type));
+      } else {
+        return newProducts;
+      }
+    }
+    return products;
+  }
+);
+export const selectComments = createSelector(
+  [getReviews, getFilterRating, getSorting],
+  (reviews, rating, sorting) => [...reviews].filter((review) => {
+    switch (rating) {
+      case FilterRating.Any:
+        return true;
+      case FilterRating.High:
+        return review.rating >= 3;
+      case FilterRating.Short:
+        return review.rating < 3;
+      default:
+        return true;
+    }
+  }).sort(Comparator[sorting])
 );

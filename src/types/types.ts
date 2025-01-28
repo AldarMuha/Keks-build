@@ -1,10 +1,12 @@
-import { addressesNames } from '../const';
+import { addressesNames, Sorting } from '../const';
+
+export type SortName = keyof typeof Sorting;
 
 export type Product = {
   id: string;
   title: string;
   category: string;
-  type: [string];
+  type: string;
   price: number;
   previewImage: string;
   previewImageWebp: string;
@@ -16,7 +18,7 @@ export type ProductId = {
   id: string;
   title: string;
   category: string;
-  type: [string];
+  type: string;
   price: number;
   previewImage: string;
   previewImageWebp: string;
@@ -48,17 +50,17 @@ export type Review = {
   rating: number;
 }
 
-export type NewReview = {
-  positive: string;
-  negative: string;
-  rating: number;
-}
+export type NewReview = Pick<Review, 'positive' | 'negative' | 'rating'> & Pick<Product, 'id'>;
 
 export type User = {
   name: string;
   email: string;
   avatarUrl: string;
   token: string;
+}
+
+export type UserAvatar = {
+  avatarUrl: string;
 }
 
 export type UserRegistration = {

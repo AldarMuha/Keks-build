@@ -1,9 +1,10 @@
 import type { AxiosError, AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { History } from 'history';
-import type { Product, ProductId, Category, Review, UserAuth, User, UserRegistration } from '../types/types';
+import type { Product, ProductId, Category, Review, UserAuth, User, NewReview } from '../types/types';
 import { AppRoute, HttpCode } from '../const';
 import { Token } from '../utils/token';
+import { AppDispatch, State } from '../types/state';
 
 const Action = {
   FETCH_PRODUCTS: 'products/fetch',
@@ -17,7 +18,7 @@ const Action = {
   DELETE_FAVORITE: 'favorites/delete',
 
   FETCH_REVIEWS: 'reviews/productId-fetch',
-  POST_REVIEWS: 'reviews/productId-post',
+  POST_REVIEW: 'reviews/productId-post',
   GET_LAST_REVIEW: 'reviews/productId-getLast',
 
   REGISTRATION_USER: 'user/registration',
@@ -103,16 +104,16 @@ export const fetchReviews = createAsyncThunk<Review[], Product['id'], { extra: E
     return data;
   }
 );
-/*
-export const postReview = createAsyncThunk<Review[], NewReview, { extra: Extra }>(
-  Action.POST_REVIEWS,
+
+export const postReview = createAsyncThunk<Review, NewReview, { extra: Extra }>(
+  Action.POST_REVIEW,
   async ({ id, positive, negative, rating }, { extra }) => {
     const { api } = extra;
-    const { data } = await api.post<Review[]>(`/v0/keks/reviews/${id}`, { positive, negative, rating });
+    const { data } = await api.post<Review>(`/v0/keks/reviews/${id}`, { positive, negative, rating });
     return data;
   }
 );
-*/
+
 export const fetchLastReview = createAsyncThunk<Review, undefined, { extra: Extra }>(
   Action.GET_LAST_REVIEW,
   async (_, { extra }) => {
@@ -122,20 +123,47 @@ export const fetchLastReview = createAsyncThunk<Review, undefined, { extra: Extr
   }
 );
 
-export const registrationUser = createAsyncThunk<UserRegistration['email'], UserRegistration, { extra: Extra }>(
+export const registrationUser = createAsyncThunk<void, FormData, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: Extra;
+}
+>(
   Action.REGISTRATION_USER,
-  async ({ name, email, password }, { extra }) => {
+  async (formData, { dispatch, extra }) => {
     const { api } = extra;
-    const { data } = await api.post<User & { token: string }>('/v0/keks/users/registration', { name, email, password });
+    const name = formData.get('user-name') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const { data } = await api.post<User>('/v0/keks/users/registration', { name, email, password });
     const { token } = data;
     Token.save(token);
-    return email;
+    dispatch(uploadAvatarUser(formData));
+  }
+);
+
+export const uploadAvatarUser = createAsyncThunk<User, FormData, { extra: Extra }>(
+  Action.UPLOAD_AVATAR_USER,
+  async (FormData, { extra }) => {
+    const { api } = extra;
+    const { data } = await api.post<User>('/v0/keks/users/upload', FormData);
+    return data;
   }
 );
 /*
-export const uploadAvatarUser = createAsyncThunk<User,
+export const uploadAvatarUser = createAsyncThunk<User, UserAvatar, { extra: Extra }>(
+  Action.UPLOAD_AVATAR_USER,
+  async ({ avatarUrl }) => fetch('/v0/keks/users/upload', {
+    method: 'POST',
+    Headers: { 'Content-Type': 'multipart/form-data' },
+    body: JSON.stringify({
+      avatarUrl
+    }),
+  })
+    .then((res) => res.json())
+    .then((res) => res)
+);
 */
-
 export const fetchUserStatus = createAsyncThunk<User, void, { extra: Extra }>(
   Action.FETCH_USER_STATUS,
   async (_, { extra }) => {
@@ -154,7 +182,7 @@ export const fetchUserStatus = createAsyncThunk<User, void, { extra: Extra }>(
   }
 );
 
-export const loginUser = createAsyncThunk<UserAuth['email'], UserAuth, { extra: Extra }>(
+export const loginUser = createAsyncThunk<User, UserAuth, { extra: Extra }>(
   Action.LOGIN_USER,
   async ({ email, password }, { extra }) => {
     const { api, history } = extra;
@@ -162,7 +190,7 @@ export const loginUser = createAsyncThunk<UserAuth['email'], UserAuth, { extra: 
     const { token } = data;
     Token.save(token);
     history.push(AppRoute.Root);
-    return email;
+    return data;
   }
 );
 

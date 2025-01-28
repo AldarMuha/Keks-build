@@ -2,6 +2,8 @@ import { FormEvent } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { UserAuth } from '../../types/types';
 import { loginUser } from '../../store/action';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -64,9 +66,9 @@ function LoginPage(): JSX.Element {
           </div>
           <p className="login-page__text-wrap">
             Ещё не зарегистрированы?
-            <a className="login-page__link" href="register-page.html">
+            <Link className="login-page__link" to={AppRoute.Registre}>
               Создайте
-            </a>
+            </Link>
             аккаунт прямо сейчас.
           </p>
         </div>

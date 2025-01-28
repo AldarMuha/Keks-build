@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../hooks';
-import { getIsProductsLoading, selectProducts } from '../../store/site-data/selectors';
+import { getIsFavoritesLoading, getIsProductsLoading, selectProducts } from '../../store/site-data/selectors';
 import { getShownCards } from '../../store/site-process/selectors';
 import CatalogCard from '../catalog-card/catalog-card';
 
@@ -7,7 +7,8 @@ function CatalogList(): JSX.Element {
   const isProductsLoading = useAppSelector(getIsProductsLoading);
   const products = useAppSelector(selectProducts);
   const shownCards = useAppSelector(getShownCards);
-  if (isProductsLoading) {
+  const isFavoritesLoading = useAppSelector(getIsFavoritesLoading);
+  if (isProductsLoading && isFavoritesLoading) {
     return <p>Загрузка....</p>;
   }
   return (

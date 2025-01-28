@@ -1,21 +1,21 @@
 import { FormEvent } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { UserRegistration } from '../../types/types';
 import { registrationUser } from '../../store/action';
+import { Link, useNavigate } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 function RegisterPage(): JSX.Element {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const data: UserRegistration = {
-      name: formData.get('user-name') as string,
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-    };
-    dispatch(registrationUser(data));
+    dispatch(registrationUser(formData));
+    navigate(AppRoute.Login);
   };
+
   return (
     <section className="register-page">
       <div className="register-page__header">
@@ -73,7 +73,7 @@ function RegisterPage(): JSX.Element {
                     <span className="custom-input__label">Введите ваше имя</span>
                     <input
                       type="file"
-                      name="user-name-1"
+                      name="avatar"
                       data-text="Аватар"
                       accept="image/jpeg"
                     />
@@ -87,9 +87,9 @@ function RegisterPage(): JSX.Element {
           </div>
           <p className="register-page__text-wrap">
             Уже зарегистрированы?
-            <a className="register-page__link" href="login-page.html">
+            <Link className="register-page__link" to={AppRoute.Login}>
               Войдите
-            </a>
+            </Link>
             в свой аккаунт.
           </p>
         </div>
