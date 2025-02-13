@@ -78,20 +78,20 @@ export const fetchFavorite = createAsyncThunk<ProductId[], undefined, { extra: E
   }
 );
 
-export const putFavorite = createAsyncThunk<ProductId[], ProductId['id'], { extra: Extra }>(
+export const putFavorite = createAsyncThunk<ProductId, ProductId['id'], { extra: Extra }>(
   Action.PUT_FAVORITE,
   async (id, { extra }) => {
     const { api } = extra;
-    const { data } = await api.put<ProductId[]>(`/v0/keks/favorites/${id}`);
+    const { data } = await api.put<ProductId>(`/v0/keks/favorites/${id}`);
     return data;
   }
 );
 
-export const deleteFavorite = createAsyncThunk<ProductId[], ProductId['id'], { extra: Extra }>(
+export const deleteFavorite = createAsyncThunk<ProductId, ProductId['id'], { extra: Extra }>(
   Action.DELETE_FAVORITE,
   async (id, { extra }) => {
     const { api } = extra;
-    const { data } = await api.delete<ProductId[]>(`/v0/keks/favorites/${id}`);
+    const { data } = await api.delete<ProductId>(`/v0/keks/favorites/${id}`);
     return data;
   }
 );

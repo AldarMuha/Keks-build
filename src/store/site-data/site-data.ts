@@ -75,10 +75,12 @@ export const siteData = createSlice({
         state.isFavoritesLoading = false;
       })
       .addCase(putFavorite.fulfilled, (state, action) => {
-        state.favorites = action.payload;
+        state.favorites.push(action.payload);
+        state.products = state.products.map((prouctItem) => (prouctItem.id === action.payload.id) ? { ...prouctItem, isFavorite: action.payload.isFavorite } : prouctItem);
       })
       .addCase(deleteFavorite.fulfilled, (state, action) => {
-        state.favorites = action.payload;
+        state.favorites = state.favorites.filter((favorite) => favorite.id !== action.payload.id);
+        state.products = state.products.filter((product) => product.isFavorite === action.payload.isFavorite);
       })
       .addCase(fetchReviews.pending, (state) => {
         state.isReviewsLoading = true;

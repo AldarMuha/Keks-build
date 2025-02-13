@@ -1,14 +1,28 @@
+import { useAppDispatch } from '../../hooks';
 import CatalogCard from '../../components/catalog-card/catalog-card';
 import EmptyFavorites from '../../components/empty-favorites/empty-favorites';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import Spinner from '../../components/spinner/spinner';
 import { useAppSelector } from '../../hooks';
+import { deleteFavorite, putFavorite } from '../../store/action';
 import { getFavorites, getIsFavoritesLoading } from '../../store/site-data/selectors';
 
 function FavoritesPage(): JSX.Element {
   const favorites = useAppSelector(getFavorites);
   const isFavoritesLoading = useAppSelector(getIsFavoritesLoading);
+  const dispatch = useAppDispatch();
+  const handleFavoriteToggle = (id: string) => {
+    const product = favorites.find((productItem) => productItem.id === id);
+    if (product) {
+      if (!product.isFavorite) {
+        dispatch(putFavorite(id));
+      } else {
+        dispatch(deleteFavorite(id));
+      }
+      //dispatch(fetchFavorite());
+    }
+  };
   if (isFavoritesLoading) {
     return <Spinner />;
   }
@@ -69,7 +83,7 @@ function FavoritesPage(): JSX.Element {
                     <ul className="catalog__list">
                       {
                         favorites.map((favorite) => (
-                          <CatalogCard key={favorite.id} {...favorite} />
+                          <CatalogCard key={favorite.id} {...favorite} onFavoriteToggle={handleFavoriteToggle} />
                         ))
                       }
                     </ul>

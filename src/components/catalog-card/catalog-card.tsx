@@ -1,21 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/types';
 import { AppRoute, AuthorizationStatus } from '../../const';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { deleteFavorite, fetchProducts, putFavorite, fetchFavorite } from '../../store/action';
+//import { useState } from 'react';
 
-function CatalogCard({ id, title, previewImage, previewImageWebp, isNew, isFavorite, price }: Product): JSX.Element {
+function CatalogCard({ id, title, previewImage, previewImageWebp, isNew, isFavorite, price, onFavoriteToggle }: Product & { onFavoriteToggle: (id: string) => void }): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const dispatch = useAppDispatch();
+  //const isFavoriteProduct = useState()
   const favoritesButtonClickHandler = () => {
-    if (!isFavorite) {
-      dispatch(putFavorite(id));
-    } else {
-      dispatch(deleteFavorite(id));
-    }
-    dispatch(fetchFavorite());
-    dispatch(fetchProducts());
+    onFavoriteToggle(id);
   };
   return (
     <li className="catalog__item">
