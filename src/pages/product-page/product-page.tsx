@@ -1,14 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getIsProductLoading, getProduct, selectComments } from '../../store/site-data/selectors';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchProduct, fetchReviews } from '../../store/action';
 import Details from '../../components/details/details';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
-//import ErrorComments from '../../components/error-comments/error-comments';
-import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute } from '../../const';
 import NewComment from '../../components/new-comment/new-comment';
 import Comment from '../../components/comment/comment';
 import NoComments from '../../components/no-comments/no-comments';
@@ -16,12 +14,11 @@ import FilterSortComments from '../../components/filter-sort-comments/filter-sor
 
 function ProductPage(): JSX.Element | null {
   const params = useParams();
-  //const userStatusLoading = useAppSelector(getIsUserStatusLoading);
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
   const isProductLoading = useAppSelector(getIsProductLoading);
   const product = useAppSelector(getProduct);
   const comments = useAppSelector(selectComments);
+  const [isOpenNewComment, setIsOpenNewComment] = useState<boolean>(false);
   useEffect(() => {
     const { id } = params;
     if (id) {
@@ -58,9 +55,9 @@ function ProductPage(): JSX.Element | null {
           </Link>
         </div>
       </div>
-      <Details {...product} />
+      <Details {...product} isOpen={isOpenNewComment} onClick={setIsOpenNewComment} />
       {
-        (authorizationStatus === AuthorizationStatus.Auth) ?
+        (isOpenNewComment) ?
           <NewComment {...product} />
           : ''
       }

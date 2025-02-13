@@ -1,9 +1,11 @@
-import { AuthorizationStatus } from '../../const';
+import { useNavigate } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchProduct, deleteFavorite, putFavorite } from '../../store/action';
 import { getAuthorizationStatus } from '../../store/user-process/selectors';
 import { ProductId } from '../../types/types';
-function Details({ id, title, price, weight, previewImageWebp, previewImage, isNew, description, rating, isFavorite }: ProductId): JSX.Element {
+function Details({ id, title, price, weight, previewImageWebp, previewImage, isNew, description, rating, isFavorite, isOpen, onClick }: ProductId & { isOpen: boolean; onClick: (isOpen: boolean) => void }): JSX.Element {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   let descriptinShow = description.length > 140 ? description.slice(0, 140) : description;
@@ -17,13 +19,23 @@ function Details({ id, title, price, weight, previewImageWebp, previewImage, isN
       dispatch(deleteFavorite(id));
     }
     dispatch(fetchProduct(id));
-    // dispatch(fetchProducts());
   };
   const ratingStars = Array.from({ length: Math.round(rating) }, (_, i) => (
     <svg className="star-rating__star star-rating__star--active" width="30" height="30" aria-hidden="true" key={i}>
       <use xlinkHref="#icon-star"></use>
     </svg>
   ));
+  const toggleFormNewComment = () => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      if (isOpen) {
+        onClick(false);
+      } else {
+        onClick(true);
+      }
+    } else {
+      navigate(AppRoute.Login);
+    }
+  };
   return (
     <section className="item-details item-details--form-open">
       <div className="container">
@@ -84,9 +96,8 @@ function Details({ id, title, price, weight, previewImageWebp, previewImage, isN
                     <span className="visually-hidden">Понравилось</span>
                   </button>
                   : ''}
-
-                <button className="btn btn--second" type="button">
-                  Отменить отзыв
+                <button className="btn btn--second" type="button" onClick={toggleFormNewComment}>
+                  {isOpen ? 'Отменить отзыв' : 'Оставить отзыв'}
                 </button>
               </div>
             </div>
