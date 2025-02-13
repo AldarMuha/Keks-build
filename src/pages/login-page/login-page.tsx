@@ -4,6 +4,7 @@ import { UserAuth } from '../../types/types';
 import { loginUser } from '../../store/action';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import history from '../../history';
 
 function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ function LoginPage(): JSX.Element {
       password: formData.get('password') as string,
     };
     dispatch(loginUser(data));
+    history.back();
   };
   return (
     <section className="login-page">

@@ -1,4 +1,4 @@
-import { unstable_HistoryRouter as HistoryRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from '../../pages/main-page/main-page';
 import CatalogPage from '../../pages/catalog-page/catalog-page';
 import ProductPage from '../../pages/product-page/product-page';
@@ -7,11 +7,10 @@ import { AppRoute } from '../../const';
 import RegisterPage from '../../pages/register-page/register-page';
 import LoginPage from '../../pages/login-page/login-page';
 import PrivateRoute from '../private-route/private-route';
-import history from '../../history';
 
 function App(): JSX.Element {
   return (
-    <HistoryRouter history={history}>
+    <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Root}
@@ -43,7 +42,7 @@ function App(): JSX.Element {
           element={<LoginPage />}
         />
       </Routes>
-    </HistoryRouter>
+    </BrowserRouter>
   );
 }
 
