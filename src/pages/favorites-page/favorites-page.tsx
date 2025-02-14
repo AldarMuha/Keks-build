@@ -7,6 +7,7 @@ import Spinner from '../../components/spinner/spinner';
 import { useAppSelector } from '../../hooks';
 import { deleteFavorite, putFavorite } from '../../store/action';
 import { getFavorites, getIsFavoritesLoading } from '../../store/site-data/selectors';
+import history from '../../history';
 
 function FavoritesPage(): JSX.Element {
   const favorites = useAppSelector(getFavorites);
@@ -23,6 +24,12 @@ function FavoritesPage(): JSX.Element {
       //dispatch(fetchFavorite());
     }
   };
+  const handleClearFavorites = async () => {
+    await Promise.all(favorites.map((favoriteItem) => dispatch(deleteFavorite(favoriteItem.id))));
+  };
+  const handleClearFavoritesClick = () => {
+    handleClearFavorites();
+  };
   if (isFavoritesLoading) {
     return <Spinner />;
   }
@@ -37,7 +44,7 @@ function FavoritesPage(): JSX.Element {
             <h1 className="visually-hidden">Избранное</h1>
             <div className="back-link">
               <div className="container">
-                <a className="back-link__link" href="#">
+                <a className="back-link__link" onClick={() => history.back()} >
                   Назад
                   <svg
                     className="back-link__icon"
@@ -53,11 +60,11 @@ function FavoritesPage(): JSX.Element {
             <section className="number-of-favourites favorites-page__qty">
               <div className="container">
                 <h2 className="visually-hidden">Количество товаров в избранном.</h2>
-                <p className="number-of-favourites__cakes">2 кекса</p>
+                <p className="number-of-favourites__cakes">{favorites.length} кекса</p>
                 <div className="number-of-favourites__wrapper">
                   <div className="number-of-favourites__wrap-price">
                     <p className="number-of-favourites__text">Всего</p>
-                    <p className="number-of-favourites__price">13&nbsp;400&nbsp;р</p>
+                    <p className="number-of-favourites__price">{favorites.reduce((total, favorite) => total + favorite.price, 0)} р</p>
                   </div>
                 </div>
                 <div className="number-of-favourites__button">
@@ -71,7 +78,7 @@ function FavoritesPage(): JSX.Element {
               <div className="container">
                 <h2 className="visually-hidden">Избранные товары</h2>
                 <div className="favourites__button">
-                  <button className="btn btn--second" type="button">
+                  <button className="btn btn--second" type="button" onClick={handleClearFavoritesClick}>
                     Очистить
                   </button>
                 </div>

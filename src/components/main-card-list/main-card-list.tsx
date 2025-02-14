@@ -10,7 +10,6 @@ function MainCardList(): JSX.Element {
   if (isProductsLoading) {
     return <p>Загрузка....</p>;
   }
-
   return (
     <ul className="random-main__list">
       {getRandomArrayElements(3, products).map((product) => (

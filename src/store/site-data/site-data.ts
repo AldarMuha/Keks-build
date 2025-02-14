@@ -80,7 +80,7 @@ export const siteData = createSlice({
       })
       .addCase(deleteFavorite.fulfilled, (state, action) => {
         state.favorites = state.favorites.filter((favorite) => favorite.id !== action.payload.id);
-        state.products = state.products.filter((product) => product.isFavorite === action.payload.isFavorite);
+        state.products = state.products.map((productItem) => (productItem.id === action.payload.id) ? { ...productItem, isFavorite: action.payload.isFavorite } : productItem);
       })
       .addCase(fetchReviews.pending, (state) => {
         state.isReviewsLoading = true;

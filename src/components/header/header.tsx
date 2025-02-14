@@ -72,7 +72,7 @@ function Header(): JSX.Element {
                   <use xlinkHref="#icon-favourite" />
                 </svg>
               </span>
-              <span className="header__favourite-number">{favorites.length}</span>
+              {favorites.length > 0 ? <span className="header__favourite-number">{favorites.length}</span> : ''}
               <span className="visually-hidden">Избранное</span>
             </Link>
             <div className="header__buttons-authorized">

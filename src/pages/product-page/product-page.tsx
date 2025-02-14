@@ -61,21 +61,19 @@ function ProductPage(): JSX.Element | null {
           <NewComment {...product} />
           : ''
       }
+      <FilterSortComments {...product} />
       {
         (comments.length > 0) ?
-          <>
-            <FilterSortComments {...product} />
-            <section className="comments">
-              <h2 className="visually-hidden">Список комментариев</h2>
-              <div className="container">
-                <div className="comments__wrapper">
-                  {comments.map((comment) => (
-                    <Comment key={comment.id} {...comment} />
-                  ))}
-                </div>
+          <section className="comments">
+            <h2 className="visually-hidden">Список комментариев</h2>
+            <div className="container">
+              <div className="comments__wrapper">
+                {comments.map((comment) => (
+                  <Comment key={comment.id} {...comment} />
+                ))}
               </div>
-            </section>
-          </>
+            </div>
+          </section>
           : <NoComments />
       }
       <Footer />

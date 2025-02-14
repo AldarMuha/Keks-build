@@ -14,7 +14,7 @@ function CatalogList(): JSX.Element {
   const handleFavoriteToggle = (id: string) => {
     const product = products.find((productItem) => productItem.id === id);
     if (product) {
-      if (!product.isFavorite) {
+      if (product.isFavorite === false) {
         dispatch(putFavorite(id));
       } else {
         dispatch(deleteFavorite(id));

@@ -51,9 +51,10 @@ function NewComment({ id }: Product): JSX.Element {
                     <span className="custom-input__label">Достоинства</span>
                     <input
                       type="text"
+                      maxLength={500}
                       name="advantages"
                       placeholder="Достоинства"
-                      required
+                      required={rating > 3}
                       value={positiveText}
                       onChange={handlePositiveTextChange}
                     />
@@ -64,9 +65,10 @@ function NewComment({ id }: Product): JSX.Element {
                     <span className="custom-input__label">Недостатки</span>
                     <input
                       type="text"
+                      maxLength={500}
                       name="disadvantages"
                       placeholder="Недостатки"
-                      required
+                      required={rating >= 1 && rating <= 3}
                       value={negativeText}
                       onChange={handleNegativeTextChange}
                     />

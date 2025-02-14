@@ -14,6 +14,16 @@ function FilterSortComments({ id }: Product): JSX.Element {
   const navigate = useNavigate();
   //const comments = useAppSelector(getReviews);
   const activeFilter = useAppSelector(getFilterRating);
+  const translateFilter = (filter: FilterRating) => {
+    switch (filter) {
+      case FilterRating.Any:
+        return 'Любой';
+      case FilterRating.Short:
+        return 'Низкий';
+      case FilterRating.High:
+        return 'Высокий';
+    }
+  };
   const onButtonDescendingClick = () => {
     dispatch(setSorting(Sorting.DateDescending));
     dispatch(fetchReviews(id));
@@ -32,7 +42,7 @@ function FilterSortComments({ id }: Product): JSX.Element {
             <h3 className="filter-sort__filter-title">Показать с рейтингом</h3>
             <div className="filter-sort__filter">
               <button className="filter-sort__filter-btn" type="button">
-                Любой
+                {translateFilter(activeFilter)}
                 <svg
                   className="filter-sort__filter-icon"
                   width={14}
@@ -71,7 +81,7 @@ function FilterSortComments({ id }: Product): JSX.Element {
                 </svg>
               </button>
               <button
-                className={`filter-sort__sort-btn filter-sort__sort-btn--des ${(activeSorting === Sorting.DateDescending) ? ' filter-sort__sort-btn--active' : ''}`}
+                className={`filter-sort__sort-btn filter-sort__sort-btn--desc ${(activeSorting === Sorting.DateDescending) ? ' filter-sort__sort-btn--active' : ''}`}
                 name={Sorting.DateDescending}
                 type="button"
                 aria-label="сортировка по убыванию"
